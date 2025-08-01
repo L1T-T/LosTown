@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>التقديم على الإدارة - Los Town</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background-color: #1e1e1e;
+      color: #fff;
+      padding: 50px;
+      text-align: center;
+    }
+
+    form {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #2a2a2a;
+      padding: 30px;
+      border-radius: 15px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #c19c4c;
+      color: #000;
+      border: none;
+      padding: 15px 30px;
+      font-size: 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #dab75b;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>التقديم على الإدارة</h1>
+  <p>عبّ البيانات التالية وسيتم إرسالها للإدارة مباشرة</p>
+
+  <form id="admin-form">
+    <input type="text" name="name" placeholder="الاسم الكامل" required>
+    <input type="number" name="age" placeholder="العمر" required>
+    <input type="text" name="position" placeholder="التواجد" required>
+    <textarea name="about" placeholder="عرف عن نفسك وخبرتك" rows="5" required></textarea>
+    <input type="text" name="discord" placeholder="اكتب الـ Discord ID الخاص فيك (مثال: 123456789012345678)" required>
+    <button type="submit">إرسال الطلب</button>
+  </form>
+
+  <script>
+    document.getElementById('admin-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const form = e.target;
+
+      const webhookURL = "https://discord.com/api/webhooks/1396399921997021234/KOE9J499YE6Op5IwsxD1hT3Rj7ROyIJTOoxRRL98rupbSnX22HW2V_RZQg3c5tYPCl4U"; // حط رابط الويب هوك هنا
+
+      const payload = {
+        username: "طلب تقديم إدارة",
+        embeds: [{
+          title: "📥 تقديم جديد",
+          color: 0xFFD700,
+          fields: [
+            { name: "👤 الاسم", value: form.name.value || "غير محدد" },
+            { name: "🎂 العمر", value: form.age.value || "غير محدد", inline: true },
+            { name: "📌 التواجد  ", value: form.position.value || "غير محدد" },
+            { name: "📝 عن المتقدّم", value: form.about.value || "غير محدد" },
+            { name: "💬 ديسكورد", value: `<@${form.discord.value}>` || "غير محدد" }
+            ],
+          timestamp: new Date().toISOString()
+        }]
+      };
+
+      fetch(webhookURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).then(() => {
+        alert("✅ تم إرسال الطلب بنجاح!");
+        form.reset();
+      }).catch(() => {
+        alert("❌ حدث خطأ أثناء الإرسال، حاول مرة أخرى.");
+      });
+    });
+  </script>
+
+</body>
+</html>
